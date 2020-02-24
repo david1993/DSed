@@ -1,24 +1,23 @@
-# 1
+# vuejs-base-course
+Учебный проект по базовому курсу vuejs
 
-## Project setup
-```
-npm install
-```
+# Сборка и запуск проекта
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+#### Для подготовки к первому запуску необходим nodejs версии 8 и выше, git версии 2.10 и выше.
 
-### Compiles and minifies for production
+Клонируем проект
 ```
-npm run build
+git clone https://github.com/AVVlasov/vuejs-base-course.git
 ```
-
-### Lints and fixes files
+Устанавливаем локально необходимые модули
 ```
-npm run lint
+npm i
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Всё готово! Можно запустить веб-сервер командой
+```
+npm run start
+```
+Смотрим результат:
+```
+http://localhost:3000
+```
