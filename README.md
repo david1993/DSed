@@ -11,11 +11,11 @@ git clone https://github.com/david1993/DSed
 ```
 Устанавливаем локально необходимые модули
 ```
-npm i
+yarn install
 ```
 Всё готово! Можно запустить веб-сервер командой
 ```
-npm run start
+yarn run start
 ```
 Смотрим результат:
 ```
