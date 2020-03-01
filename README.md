@@ -1,5 +1,5 @@
-# vuejs-base-course
-Учебный проект по базовому курсу vuejs
+# dsed
+Форма  авторизации  + сообщения
 
 # Сборка и запуск проекта
 
@@ -7,7 +7,7 @@
 
 Клонируем проект
 ```
-git clone https://github.com/AVVlasov/vuejs-base-course.git
+git clone https://github.com/david1993/DSed
 ```
 Устанавливаем локально необходимые модули
 ```
