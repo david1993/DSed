@@ -17,10 +17,10 @@ if (!orgs) {
 }
 let users = null;
 try {
-     users = JSON.parse(localStorage.users)
+    users = JSON.parse(localStorage.users)
 } catch (e) {
 }
-if (!users ||!users.length) {
+if (!users || !users.length) {
     users = [
         {id: 1, name: 'Миша', orgId: 1},
         {id: 2, name: 'Саша', orgId: 1},
@@ -43,13 +43,32 @@ if (!users ||!users.length) {
 }
 console.log({users, orgs});
 
+let messages = [];
+try {
+    messages = JSON.parse(localStorage.messages);
+} catch (e) {
+
+}
+
+function findUser(userId) {
+    let filteredUsers = users.filter(user => {
+        return user.id === userId;
+    });
+    if (!filteredUsers.length) {
+        return null
+    }
+    return filteredUsers[0];
+}
+
 export function configureFakeBackend() {
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
             // wrap in timeout to simulate server api call
             setTimeout(() => {
+                const currentUser = JSON.parse(localStorage.getItem('user'));
                 //get orgs
+                console.log(url, opts);
                 if (url.endsWith('/org/list') && opts.method === 'GET') {
 
                     let responseJson = {
@@ -169,6 +188,49 @@ export function configureFakeBackend() {
                                 break;
                             }
                         }
+
+                        // respond 200 OK
+                        resolve({ok: true, text: () => Promise.resolve()});
+                    } else {
+                        // return 401 not authorised if token is null or invalid
+                        reject('Unauthorised');
+                    }
+
+                    return;
+                }
+                if (url.match(/\/message\/all/) && opts.method === 'GET') {
+                    // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
+                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+
+                        let filteredMessages = messages.filter(message => {
+                            return message.from_user_id === currentUser.id || message.to_user_id === currentUser.id
+                        }).map(message => {
+                            message.fromUser = findUser(message.from_user_id)
+                            message.toUser = findUser(message.to_user_id)
+                            return message
+                        })
+
+
+                        // respond 200 OK
+                        resolve({ok: true, text: () => Promise.resolve(JSON.stringify(filteredMessages))});
+                    } else {
+                        // return 401 not authorised if token is null or invalid
+                        reject('Unauthorised');
+                    }
+
+                    return;
+                }
+                if (url.match(/\/message\/add$/) && opts.method === 'POST') {
+                    // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
+                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+                        let data = JSON.parse(opts.body);
+                        let message = {
+                            from_user_id: currentUser.id,
+                            to_user_id: data.user.id,
+                            text: data.text,
+                        }
+                        messages.unshift(message);
+                        localStorage.setItem('messages', JSON.stringify(messages));
 
                         // respond 200 OK
                         resolve({ok: true, text: () => Promise.resolve()});
