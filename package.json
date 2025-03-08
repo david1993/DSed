@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/AVVlasov/vuejs-base-course#readme",
   "dependencies": {
-    "axios": "0.19.2",
+    "axios": "1.8.2",
     "vee-validate": "^2.2.8",
     "vue": "2.6.11",
     "vue-select": "3.4.0",
